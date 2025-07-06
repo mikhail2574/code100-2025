@@ -17116,8 +17116,9 @@
     </div>
     <script src="./Hearts and minds_files/failwind.js.Download"></script>
     <script>
-      //Task 1
-      // Func for transforming matrix to angle
+      // ###### SOLUTION BEGIN #####
+      const allElements = document.querySelectorAll("div");
+      // Func for transforming matrix to angle (used for task 1)
       function getRotationFromMatrix(matrix) {
         const values = matrix.match(/matrix\(([^)]+)\)/);
         if (!values) return 0;
@@ -17130,28 +17131,64 @@
 
         return (angleDeg + 360) % 360;
       }
-      const heartBrainStraight = document.getElementById(
-        "heart-brain-straight"
-      );
 
-      const allElements = document.querySelectorAll("div");
       let heartsBrainsStraightCount = 0;
+      let brainLeftCount = 0;
+      let heartRightCount = 0;
+      const docWidth = window.innerWidth;
 
       allElements.forEach((el) => {
         const elementContent = el.innerText || "";
+        //Task 1
         if (elementContent === "🧠" || elementContent === "♥") {
           const computedStyle = window.getComputedStyle(el);
           const transform = computedStyle.transform;
 
           if (transform.includes("matrix")) {
-            const angle = getRotationFromMatrix(transform);
+            const angle = Math.round(getRotationFromMatrix(transform));
             if (angle % 90 === 0) {
               heartsBrainsStraightCount++;
             }
           }
         }
+        //Task 2
+        if (elementContent === "🧠") {
+          const computedStyle = window.getComputedStyle(el);
+          const leftStr = computedStyle.left;
+
+          const leftPx = parseFloat(leftStr); // clear ending with "px"
+
+          if (leftPx < docWidth / 2) {
+            brainLeftCount++;
+          }
+        }
+        //Task 3
+        if (elementContent === "♥") {
+          const computedStyle = window.getComputedStyle(el);
+          const leftStr = computedStyle.left;
+
+          const leftPx = parseFloat(leftStr); // clear ending with "px"
+
+          if (leftPx > docWidth / 2) {
+            heartRightCount++;
+          }
+        }
       });
+
+      //Task1
+      const heartBrainStraight = document.getElementById(
+        "heart-brain-straight"
+      );
       heartBrainStraight.textContent = heartsBrainsStraightCount;
+
+      //Task 2
+      const brainLeftSide = document.getElementById("brain-left-side");
+      brainLeftSide.textContent = brainLeftCount;
+
+      //Task 3
+      const heartRightSide = document.getElementById("heart-right-side");
+      heartRightSide.textContent = heartRightCount;
+      // ##### SOLUTION END #####
     </script>
   </body>
 </html>
